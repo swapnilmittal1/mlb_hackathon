@@ -2,3 +2,4 @@
 __pycache__/
 *.pyc
 APIKey.txt
+.DS_Store
