@@ -17,24 +17,23 @@ This project builds an ML pipeline to predict single-mutation protein fitness (�
 •⁠  ⁠⁠ `hackathonNBFinal-2.ipynb` ⁠  
   Notebook version of the workflow.
 
-### Data folder
-•⁠  ⁠⁠ Hackathon_data/sequence.fasta ⁠ — wild-type sequence  
-•⁠  ⁠⁠ Hackathon_data/train.csv ⁠ — initial labeled data  
-•⁠  ⁠⁠ Hackathon_data/test.csv ⁠ — unlabeled test mutants  
-•⁠  ⁠⁠ Hackathon_data/query_round_1_results.csv ⁠  
-•⁠  ⁠⁠ Hackathon_data/query_round_2_results.csv ⁠  
-•⁠  ⁠⁠ Hackathon_data/query_round_3_results.csv ⁠  
-•⁠  ⁠⁠ Hackathon_data/plm_scores.csv ⁠ — PLM scores used in final model  
-•⁠  ⁠⁠ Hackathon_data/plm_scores_full_debug.csv ⁠ — detailed PLM scoring diagnostics
+### data folder
+•⁠  ⁠⁠ `data/sequence.fasta` ⁠ — wild-type sequence  
+•⁠  ⁠⁠ `data/train.csv` ⁠ — initial labeled data  
+•⁠  ⁠⁠ `data/test.csv` ⁠ — unlabeled test mutants  
+•⁠  ⁠⁠ `data/query_round_1_results.csv` ⁠  
+•⁠  ⁠⁠ `data/query_round_2_results.csv` ⁠  
+•⁠  ⁠⁠ `data/query_round_3_results.csv` ⁠  
+•⁠  ⁠⁠ `data/plm_scores.csv` ⁠ — PLM scores used in final model  
+•⁠  ⁠⁠ `data/plm_scores_full_debug.csv` ⁠ — detailed PLM scoring diagnostics
 
 ### Generated outputs
-•⁠  ⁠⁠ predictions.csv ⁠  
-•⁠  ⁠⁠ test_predictions.csv ⁠  
-•⁠  ⁠⁠ test_predictions_submission.csv ⁠  
-•⁠  ⁠⁠ top10.txt ⁠  
-•⁠  ⁠⁠ query_round_*.txt ⁠
-
----
+•⁠  ⁠⁠ `predictions.csv`
+•⁠  ⁠⁠ `test_predictions.csv` ⁠  
+•⁠  ⁠⁠ `test_predictions_submission.csv` ⁠  
+•⁠  ⁠⁠ `top10.txt` ⁠  
+•⁠  ⁠⁠ `query_round_*.txt` ⁠
+•⁠  ⁠⁠ `query.txt` ⁠
 
 ## Method Overview
 
@@ -58,8 +57,6 @@ Our final approach combines three components:
    - train multiple seeded final models and aggregate predictions (mean/std)
 
 Primary model metric: *Spearman correlation* on validation split.
-
----
 
 ## Setup
 
