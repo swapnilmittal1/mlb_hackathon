@@ -15,15 +15,12 @@ SEQUENCE_FASTA = DATA_DIR / "sequence.fasta"
 TEST_CSV = DATA_DIR / "test.csv"
 OUTPUT_CSV = DATA_DIR / "plm_scores.csv"
 
-# ESM-1v is the course-aligned choice for mutation-effect style scoring.
 MODEL_NAME = "facebook/esm1v_t33_650M_UR90S_1"
 
 # Use GPU if available.
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
-# Optional batching over mutation positions. Since every mutant is single-site,
-# we can score all 19 mutants at the same position from one forward pass.
-# This makes the script much faster than scoring each mutant separately.
+# Optional batching over mutation positions
 BATCH_SIZE_POSITIONS = 128
 
 
@@ -153,8 +150,8 @@ def main() -> None:
 
     result_df = score_positions_with_esm1v(sequence_wt, position_groups)
 
-    # Keep the exact two-column file your main pipeline expects,
-    # plus write a richer debug file.
+    # keep the exact two-column file your main pipeline expects,
+    # plus write a richer debug file
     result_df[["mutant", "plm_score"]].to_csv(OUTPUT_CSV, index=False)
     result_df.to_csv(DATA_DIR / "plm_scores_full_debug.csv", index=False)
 
