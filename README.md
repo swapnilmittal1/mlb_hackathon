@@ -1,20 +1,20 @@
-# MLB S26 Hackathon — Protein Fitness Prediction with Active Learning
+# MLB S26 Hackathon: Protein Fitness Prediction with Active Learning
 
 This project builds an ML pipeline to predict single-mutation protein fitness (⁠ DMS_score ⁠) and recommend top mutations under a limited active-learning query budget.
 
 ## Repository Contents
 
 ### Core scripts
-•⁠  ⁠⁠ hachathon_final_with_plm.py ⁠  
+•⁠  ⁠⁠ `hachathon_final_with_plm.py` ⁠  
   Final end-to-end pipeline (query integration + model training + ensemble + submission outputs).
 
-•⁠  ⁠⁠ mlb_hackathon_script.py ⁠  
+•⁠  ⁠⁠ `mlb_hackathon_script.py` ⁠  
   Main script variant for iterative experimentation and active-learning workflow.
 
-•⁠  ⁠⁠ compute_plm_scores.py ⁠  
+•⁠  ⁠⁠ `compute_plm_scores.py` ⁠  
   Computes ESM-1v mutation plausibility scores (⁠ plm_score ⁠) for all test mutants.
 
-•⁠  ⁠⁠ hackathonNBFinal-2.ipynb ⁠  
+•⁠  ⁠⁠ `hackathonNBFinal-2.ipynb` ⁠  
   Notebook version of the workflow.
 
 ### Data folder
