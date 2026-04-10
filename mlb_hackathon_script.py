@@ -1,7 +1,3 @@
-# =========================
-# Hackathon script with 3-query loop support
-# =========================
-
 import os
 import random
 from copy import deepcopy
@@ -44,15 +40,8 @@ from Bio.Align import substitution_matrices
 from xgboost import XGBRegressor
 import optuna
 
-
-# =========================
-# USER SETTINGS
-# =========================
-
 DATA_DIR = Path.cwd() / "Hackathon_data"
 
-# Put returned ActiveLearning CSV files here as you get them back.
-# Round 0 / before any query:
 QUERY_RESULT_FILES = [
     "query_round_1_results.csv",
     "query_round_2_results.csv",
@@ -85,18 +74,8 @@ PLM_SCORE_FILE_CANDIDATES = [
 QUERY_SCORE_WEIGHTS = {"pred_mean": 0.55, "pred_std": 0.25, "plm_score": 0.20}
 TOP10_SCORE_WEIGHTS = {"pred_mean": 0.70, "pred_std": -0.15, "plm_score": 0.15}
 
-
-# =========================
-# REPRODUCIBILITY
-# =========================
-
 random.seed(SEED)
 np.random.seed(SEED)
-
-
-# =========================
-# LOAD BASE DATA
-# =========================
 
 with open(DATA_DIR / "sequence.fasta", "r") as f:
     data = f.readlines()
@@ -128,11 +107,6 @@ df_test["sequence"] = df_test["mutant"].apply(lambda x: get_mutated_sequence(x, 
 print("Initial train shape:", df_train.shape)
 print("Test shape:", df_test.shape)
 
-
-# =========================
-# INTEGRATE QUERY RESULTS
-# =========================
-
 def load_and_normalize_query_results(path: Path) -> pd.DataFrame:
     df = pd.read_csv(path)
 
@@ -162,11 +136,6 @@ for fname in QUERY_RESULT_FILES:
 
 print("Train shape after query integration:", df_train.shape)
 print("Queries already integrated:", len(QUERY_RESULT_FILES))
-
-
-# =========================
-# OPTIONAL PLM SCORES
-# =========================
 
 def resolve_plm_score_file() -> Path | None:
     candidate_paths = []
@@ -217,11 +186,6 @@ df_train["plm_score"] = df_train["plm_score"].fillna(0.0).astype(np.float32)
 df_test["plm_score"] = df_test["plm_score"].fillna(0.0).astype(np.float32)
 df_train["position"] = df_train["mutant"].apply(extract_mutation_position)
 df_test["position"] = df_test["mutant"].apply(extract_mutation_position)
-
-
-# =========================
-# FEATURE ENCODING
-# =========================
 
 blosum62 = substitution_matrices.load("BLOSUM62")
 
@@ -375,11 +339,6 @@ X_val, y_val = X_all[val_idx], y_all[val_idx]
 
 print(f"Features: {X_train.shape[1]}, Train: {len(X_train)}, Val: {len(X_val)}")
 
-
-# =========================
-# TRAIN MODEL
-# =========================
-
 def objective(trial):
     params = {
         "n_estimators": trial.suggest_int("n_estimators", 100, 2000),
@@ -453,11 +412,6 @@ if val_sp >= CHECKPOINT_THRESHOLD:
 else:
     print(f"Checkpoint threshold NOT passed on validation split (< {CHECKPOINT_THRESHOLD:.2f}).")
 
-
-# =========================
-# TEST PREDICTIONS
-# =========================
-
 df_test = df_test.copy()
 final_test_predictions = []
 for ensemble_seed in FINAL_MODEL_SEEDS:
@@ -482,12 +436,6 @@ submission_df.to_csv("test_predictions.csv", index=False)
 
 print("Saved predictions.csv and test_predictions.csv")
 print(submission_df.head())
-
-
-# =========================
-# TOP 10 FOR FINAL SUBMISSION
-# exclude ONLY original train.csv mutants
-# =========================
 
 top10_candidates = (
     df_test.loc[
@@ -514,12 +462,6 @@ with open("top10.txt", "w") as f:
 
 print("Saved top10.txt")
 print(top10_df[["mutant", "pred_mean", "pred_std", "plm_score", "top10_score"]])
-
-
-# =========================
-# BUILD NEXT QUERY FILE
-# exclude everything already labeled so far
-# =========================
 
 queries_completed = len(QUERY_RESULT_FILES)
 
@@ -621,11 +563,6 @@ if queries_completed < 3:
 else:
     print("All 3 query rounds already integrated. No further query file generated.")
 
-
-# =========================
-# SANITY CHECKS
-# =========================
-
 assert len(submission_df) == len(pd.read_csv(DATA_DIR / "test.csv")), \
     "predictions file must cover all test mutants"
 
@@ -651,12 +588,6 @@ print("- test_predictions.csv")
 print("- top10.txt")
 if queries_completed < 3:
     print(f"- query_round_{queries_completed + 1}.txt")
-
-
-# =========================
-# EXTRA SUBMISSION-FORMAT FILE
-# Leaves test_predictions.csv untouched and writes a separate file.
-# =========================
 
 submission_format_df = submission_df.rename(
     columns={"DMS_score_predicted": "DMS_score"}
